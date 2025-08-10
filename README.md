@@ -103,7 +103,7 @@ MIT © 2025 [Bhinneka Dev](https://github.com/BhinnekaDev)
 ---
 
 <p align="center">
-  <img alt="Cuplikan Dashboard Buku Tamu" src="https://github.com/user-attachments/assets/238eb111-a465-46b4-bb4f-ac5df2cce9c4" width="80%" />
+  <img alt="Cuplikan Dashboard Buku Tamu" src="https://github.com/user-attachments/assets/a58d0b61-9d6d-4c42-afc2-48071f72304d" width="80%" />
 </p>
 
 <p align="center"><sub>Bhinneka Developer © 2025</sub></p>
