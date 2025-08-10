@@ -23,7 +23,7 @@
 
 ## 🌐 Demo <a id="demo"></a>
 
-Belum tersedia demo online (jika ada, tambahkan URL di sini).
+Coba langsung: **[https://buku-tamu-mkg-nu.vercel.app/](https://buku-tamu-mkg-nu.vercel.app/)** (hosted on Vercel)
 
 ---
 
@@ -43,7 +43,7 @@ Belum tersedia demo online (jika ada, tambahkan URL di sini).
 
 | Layer           | Stack                                           |
 | --------------- | ----------------------------------------------- |
-| **Frontend**    | Next.js 14, React 18, TypeScript, Tailwind CSS  |
+| **Frontend**    | Next.js 15, React 19, TypeScript, Tailwind CSS  |
 | **Backend**     | API REST sederhana (jika ada, jelaskan singkat) |
 | **Data**        | Database lokal / API endpoint                   |
 | **CI & Deploy** | GitHub Actions, Vercel Edge Runtime             |
@@ -84,13 +84,6 @@ Akses **[http://localhost:3000](http://localhost:3000)**
 3. Cek daftar tamu untuk melihat tamu yang sudah terdaftar.
 4. Gunakan fitur filter atau pencarian untuk memudahkan monitoring.
 5. Ekspor data jika diperlukan untuk laporan.
-
----
-
-## 🔌 Struktur Data <a id="data"></a>
-
-* **`/data/guestbook.json`** — Data tamu tersimpan (opsional, jika statis)
-* **API URL** — Diset melalui `NEXT_PUBLIC_API_BASE_URL`
 
 ---
 
