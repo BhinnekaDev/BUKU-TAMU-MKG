@@ -1,7 +1,7 @@
 "use client";
 interface DataBukuTamu {
   Nama_Depan_Pengunjung: string;
-  Nama_Belakang_Pengunjung: string;
+  Nama_Belakang_Pengunjung?: string;
   Email_Pengunjung?: string;
   email?: string;
   No_Telepon_Pengunjung: string;
@@ -9,9 +9,9 @@ interface DataBukuTamu {
 }
 
 import Button from "@/components/Button";
-import Image from "next/image";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
@@ -167,10 +167,9 @@ export default function CardForm() {
     // Validasi data wajib dari sessionStorage
     if (
       !dataBukuTamu.Nama_Depan_Pengunjung ||
-      !dataBukuTamu.Nama_Belakang_Pengunjung ||
       !dataBukuTamu.No_Telepon_Pengunjung
     ) {
-      alert("Nama depan, nama belakang, dan no telepon wajib diisi.");
+      alert("Nama depan dan no telepon wajib diisi.");
       return;
     }
 
@@ -230,13 +229,12 @@ export default function CardForm() {
         <div className="flex w-full max-w-5xl bg-white rounded-3xl shadow-lg overflow-hidden flex-col md:flex-row">
           <div className="hidden md:block w-full md:w-1/2">
             <Image
-  src={getStasiunImage() || "/fallback.png"} // jaga-jaga jika undefined
-  alt={`Gedung ${stasiunName}`}
-  width={600} // sesuaikan dengan ukuran real
-  height={400}
-  className="w-full h-full object-cover"
-/>
-
+              src={getStasiunImage() || "/fallback.png"} // jaga-jaga jika undefined
+              alt={`Gedung ${stasiunName}`}
+              width={600} // sesuaikan dengan ukuran real
+              height={400}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center">
@@ -266,7 +264,7 @@ export default function CardForm() {
                     required
                   >
                     <option value="" disabled>
-                      Pilih Asal Pengunjung
+                      Pilih Asal Pengunjung{" "}
                     </option>
                     <option value="BMKG">BMKG</option>
                     <option value="Pemerintah Pusat/Pemerintah Daerah">
