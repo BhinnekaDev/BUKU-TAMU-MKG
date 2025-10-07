@@ -4,16 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-
-interface PengunjungSuggestion {
-  ID_Pengunjung: string;
-  Nama_Depan_Pengunjung: string;
-  Nama_Belakang_Pengunjung: string;
-  Email_Pengunjung: string;
-  No_Telepon_Pengunjung: string;
-}
-
-
 export default function CardForm2() {
   const router = useRouter();
 
@@ -27,11 +17,10 @@ export default function CardForm2() {
 
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-  const [suggestions, setSuggestions] = useState<PengunjungSuggestion[]>([]);
-const [showSuggestions, setShowSuggestions] = useState(false);
   const [stasiunName, setStasiunName] = useState("");
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const storedIdStasiun = sessionStorage.getItem("selectedStasiunId");
     const storedNamaStasiun = sessionStorage.getItem("selectedStasiunName");
 
@@ -67,57 +56,15 @@ const [showSuggestions, setShowSuggestions] = useState(false);
     return regex.test(phone);
   };
 
-  const isFormValid = () =>
-    formData.Nama_Depan_Pengunjung.trim() &&
-    formData.Nama_Belakang_Pengunjung.trim() &&
-    formData.Email_Pengunjung.trim() &&
-    formData.No_Telepon_Pengunjung.trim() &&
-    formData.id_stasiun &&
-    isEmailValid &&
-    isPhoneValid;
-
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "Email_Pengunjung") setIsEmailValid(isValidEmail(value));
-    if (name === "No_Telepon_Pengunjung") setIsPhoneValid(isValidPhone(value));
-
-    if (name === "Nama_Depan_Pengunjung" && value.length >= 2) {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/pengunjung/search`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ keyword: value }),
-          }
-        );
-        const data = await res.json();
-        setSuggestions(data);
-        setShowSuggestions(true);
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setSuggestions([]);
-        setShowSuggestions(false);
-      }
-    } else if (name === "Nama_Depan_Pengunjung") {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  };
-
-  const handleSelectSuggestion = (pengunjung: PengunjungSuggestion) => {
-    setFormData({
-      Nama_Depan_Pengunjung: pengunjung.Nama_Depan_Pengunjung,
-      Nama_Belakang_Pengunjung: pengunjung.Nama_Belakang_Pengunjung,
-      Email_Pengunjung: pengunjung.Email_Pengunjung,
-      No_Telepon_Pengunjung: pengunjung.No_Telepon_Pengunjung,
-      id_stasiun: formData.id_stasiun,
-    });
-    setIsEmailValid(isValidEmail(pengunjung.Email_Pengunjung));
-    setIsPhoneValid(isValidPhone(pengunjung.No_Telepon_Pengunjung));
-    setShowSuggestions(false);
+  const isFormValid = () => {
+    return (
+      formData.Nama_Depan_Pengunjung.trim() !== "" &&
+      formData.Email_Pengunjung.trim() !== "" &&
+      formData.No_Telepon_Pengunjung.trim() !== "" &&
+      formData.id_stasiun !== "" &&
+      isEmailValid &&
+      isPhoneValid
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -136,13 +83,12 @@ const [showSuggestions, setShowSuggestions] = useState(false);
         {/* Gambar kiri */}
         <div className="hidden md:block w-1/2">
           <Image
-  src={getStasiunImage() || "/LogoBmkg.png"} // fallback jika null
-  alt={`Gedung ${stasiunName}`}
-  width={600} // sesuaikan ukuran aslinya
-  height={400}
-  className="w-full h-full object-cover"
-/>
-
+            src={getStasiunImage() || "/LogoBmkg.png"} // fallback jika null
+            alt={`Gedung ${stasiunName}`}
+            width={600} // sesuaikan ukuran aslinya
+            height={400}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Form kanan */}
@@ -165,36 +111,34 @@ const [showSuggestions, setShowSuggestions] = useState(false);
                   type="text"
                   name="Nama_Depan_Pengunjung"
                   value={formData.Nama_Depan_Pengunjung}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      Nama_Depan_Pengunjung: e.target.value,
+                    })
+                  }
                   className="w-full px-4 py-2 border border-blue-300 rounded-xl text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
-                {showSuggestions && suggestions.length > 0 && (
-                  <ul className="absolute z-10 w-full bg-white border border-blue-300 rounded-md mt-1 max-h-40 overflow-y-auto">
-                    {suggestions.map((item) => (
-                      <li
-                        key={item.ID_Pengunjung}
-                        onClick={() => handleSelectSuggestion(item)}
-                        className="px-4 py-2 hover:bg-blue-100 text-blue-800 cursor-pointer text-sm"
-                      >
-                        {item.Nama_Depan_Pengunjung}{" "}
-                        {item.Nama_Belakang_Pengunjung}
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
+
               <div className="flex-1">
                 <label className="text-sm text-blue-800 font-medium mb-1">
-                  Nama Belakang
+                  Nama Belakang{" "}
+                  <span className="text-gray-500">(opsional)</span>
                 </label>
                 <input
                   type="text"
                   name="Nama_Belakang_Pengunjung"
                   value={formData.Nama_Belakang_Pengunjung}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      Nama_Belakang_Pengunjung: e.target.value,
+                    })
+                  }
+                  placeholder="Boleh dikosongkan"
                   className="w-full px-4 py-2 border border-blue-300 rounded-xl text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
               </div>
             </div>
@@ -207,7 +151,13 @@ const [showSuggestions, setShowSuggestions] = useState(false);
                 type="email"
                 name="Email_Pengunjung"
                 value={formData.Email_Pengunjung}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    Email_Pengunjung: e.target.value,
+                  });
+                  setIsEmailValid(isValidEmail(e.target.value));
+                }}
                 className={`w-full px-4 py-2 border ${
                   isEmailValid ? "border-blue-300" : "border-red-500"
                 } rounded-xl text-blue-800 focus:outline-none focus:ring-2 ${
@@ -230,7 +180,13 @@ const [showSuggestions, setShowSuggestions] = useState(false);
                 type="tel"
                 name="No_Telepon_Pengunjung"
                 value={formData.No_Telepon_Pengunjung}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    No_Telepon_Pengunjung: e.target.value,
+                  });
+                  setIsPhoneValid(isValidPhone(e.target.value));
+                }}
                 className={`w-full px-4 py-2 border ${
                   isPhoneValid ? "border-blue-300" : "border-red-500"
                 } rounded-xl text-blue-800 focus:outline-none focus:ring-2 ${
