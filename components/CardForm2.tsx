@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-
 interface PengunjungSuggestion {
   ID_Pengunjung: string;
   Nama_Depan_Pengunjung: string;
@@ -12,7 +11,6 @@ interface PengunjungSuggestion {
   Email_Pengunjung: string;
   No_Telepon_Pengunjung: string;
 }
-
 
 export default function CardForm2() {
   const router = useRouter();
@@ -28,7 +26,7 @@ export default function CardForm2() {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [suggestions, setSuggestions] = useState<PengunjungSuggestion[]>([]);
-const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [stasiunName, setStasiunName] = useState("");
 
   useEffect(() => {
@@ -69,7 +67,6 @@ const [showSuggestions, setShowSuggestions] = useState(false);
 
   const isFormValid = () =>
     formData.Nama_Depan_Pengunjung.trim() &&
-    formData.Nama_Belakang_Pengunjung.trim() &&
     formData.Email_Pengunjung.trim() &&
     formData.No_Telepon_Pengunjung.trim() &&
     formData.id_stasiun &&
@@ -91,7 +88,7 @@ const [showSuggestions, setShowSuggestions] = useState(false);
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ keyword: value }),
-          }
+          },
         );
         const data = await res.json();
         setSuggestions(data);
@@ -136,13 +133,12 @@ const [showSuggestions, setShowSuggestions] = useState(false);
         {/* Gambar kiri */}
         <div className="hidden md:block w-1/2">
           <Image
-  src={getStasiunImage() || "/LogoBmkg.png"} // fallback jika null
-  alt={`Gedung ${stasiunName}`}
-  width={600} // sesuaikan ukuran aslinya
-  height={400}
-  className="w-full h-full object-cover"
-/>
-
+            src={getStasiunImage() || "/LogoBmkg.png"} // fallback jika null
+            alt={`Gedung ${stasiunName}`}
+            width={600} // sesuaikan ukuran aslinya
+            height={400}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Form kanan */}
@@ -185,8 +181,11 @@ const [showSuggestions, setShowSuggestions] = useState(false);
                 )}
               </div>
               <div className="flex-1">
-                <label className="text-sm text-blue-800 font-medium mb-1">
+                <label className="text-sm text-blue-800 font-medium mb-1 flex items-center gap-2">
                   Nama Belakang
+                  <span className="text-xs text-gray-500 font-normal">
+                    (Opsional)
+                  </span>
                 </label>
                 <input
                   type="text"
@@ -194,7 +193,6 @@ const [showSuggestions, setShowSuggestions] = useState(false);
                   value={formData.Nama_Belakang_Pengunjung}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-blue-300 rounded-xl text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
                 />
               </div>
             </div>

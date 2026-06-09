@@ -52,6 +52,9 @@ export default function CardForm() {
   const [formData, setFormData] = useState({
     asalpengunjung: "",
     tujuan: "",
+    Nama_Depan_Pengunjung: "",
+    Nama_Belakang_Pengunjung: "",
+    No_Telepon_Pengunjung: "",
   });
   const [hasSigned, setHasSigned] = useState(false);
   const [signatureFile, setSignatureFile] = useState<File | null>(null);
@@ -167,10 +170,9 @@ export default function CardForm() {
     // Validasi data wajib dari sessionStorage
     if (
       !dataBukuTamu.Nama_Depan_Pengunjung ||
-      !dataBukuTamu.Nama_Belakang_Pengunjung ||
       !dataBukuTamu.No_Telepon_Pengunjung
     ) {
-      alert("Nama depan, nama belakang, dan no telepon wajib diisi.");
+      alert("Nama depan, dan no telepon wajib diisi.");
       return;
     }
 
@@ -180,16 +182,16 @@ export default function CardForm() {
     const form = new FormData();
     form.append(
       "Nama_Depan_Pengunjung",
-      (dataBukuTamu.Nama_Depan_Pengunjung || "").trim()
+      (dataBukuTamu.Nama_Depan_Pengunjung || "").trim(),
     );
     form.append(
       "Nama_Belakang_Pengunjung",
-      (dataBukuTamu.Nama_Belakang_Pengunjung || "").trim()
+      formData.Nama_Belakang_Pengunjung.trim() || "",
     );
     form.append("Email_Pengunjung", emailCleaned);
     form.append(
       "No_Telepon_Pengunjung",
-      (dataBukuTamu.No_Telepon_Pengunjung || "").trim()
+      (dataBukuTamu.No_Telepon_Pengunjung || "").trim(),
     );
     form.append("id_stasiun", dataBukuTamu.id_stasiun || "");
     form.append("Asal_Pengunjung", formData.asalpengunjung.trim());
@@ -203,7 +205,7 @@ export default function CardForm() {
     try {
       const response = await fetch(
         "https://buku-tamu-mkg-database.vercel.app/api/pengunjung/isi-buku-tamu",
-        { method: "POST", body: form }
+        { method: "POST", body: form },
       );
 
       if (response.ok) {
@@ -230,13 +232,12 @@ export default function CardForm() {
         <div className="flex w-full max-w-5xl bg-white rounded-3xl shadow-lg overflow-hidden flex-col md:flex-row">
           <div className="hidden md:block w-full md:w-1/2">
             <Image
-  src={getStasiunImage() || "/fallback.png"} // jaga-jaga jika undefined
-  alt={`Gedung ${stasiunName}`}
-  width={600} // sesuaikan dengan ukuran real
-  height={400}
-  className="w-full h-full object-cover"
-/>
-
+              src={getStasiunImage() || "/fallback.png"} // jaga-jaga jika undefined
+              alt={`Gedung ${stasiunName}`}
+              width={600} // sesuaikan dengan ukuran real
+              height={400}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center">
