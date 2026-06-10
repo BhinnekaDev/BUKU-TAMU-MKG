@@ -186,7 +186,7 @@ export default function CardForm() {
     );
     form.append(
       "Nama_Belakang_Pengunjung",
-      formData.Nama_Belakang_Pengunjung.trim() || "",
+      dataBukuTamu.Nama_Belakang_Pengunjung || "".trim(),
     );
     form.append("Email_Pengunjung", emailCleaned);
     form.append(
